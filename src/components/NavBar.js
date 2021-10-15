@@ -18,10 +18,11 @@ export default class NavBar extends Component {
                         <Link to='/'>
                             <img src={logo} alt='Beach Resort' />
                         </Link>
-                        <button className="nav-btn">
+                        <button className="nav-btn" type='button' onClick={this.handleToggle}>
                             <FaAlignRight className='nav-icon'/>
                         </button>
                     </div>
+                    {/* if it is true, shows the nav, if false, shows the links only */}
                     <ul className={this.state.isOpen ? 'nav-links show-nav' : 'nav-links'}>
                         <li>
                             <Link to='/'>Home</Link>
