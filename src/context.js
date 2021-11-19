@@ -49,7 +49,7 @@ class RoomProvider extends Component {
         }
     }
 
-    // from data
+    // get data from regular data.js
     // componentDidMount() {
     //     let rooms = this.formatData(items)
     //     let featuredRooms = rooms.filter(room => room.featured === true)
