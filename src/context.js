@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import items from './data'
+// import items from './data'
+import Client from './Contentful'
 
 const RoomContext = React.createContext();
 // this creates two comps, provider and consumer
@@ -20,22 +21,52 @@ class RoomProvider extends Component {
         breakfast: false,
         pets: false
     }
-    // getData
+    // getData from contentful
+    getData = async () => {
+        try {
+            let response = await Client.getEntries({
+                content_type: 'beachResortRoomExample',
+                order: "sys.createdAt"
+            })
+            
+                let rooms = this.formatData(response.items)
+                //response.items is the array of data, how it was built to match the format
+                let featuredRooms = rooms.filter(room => room.featured === true)
+                let maxPrice = Math.max(...rooms.map(item => item.price))
+                let maxSize = Math.max(...rooms.map(item => item.size))
+                this.setState({
+                    rooms,
+                    featuredRooms,
+                    sortedRooms:rooms,
+                    loading:false,
+                    price:maxPrice,
+                    maxPrice,
+                    maxSize
+                })
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    // from data
+    // componentDidMount() {
+    //     let rooms = this.formatData(items)
+    //     let featuredRooms = rooms.filter(room => room.featured === true)
+    //     let maxPrice = Math.max(...rooms.map(item => item.price))
+    //     let maxSize = Math.max(...rooms.map(item => item.size))
+    //     this.setState({
+    //         rooms,
+    //         featuredRooms,
+    //         sortedRooms:rooms,
+    //         loading:false,
+    //         price:maxPrice,
+    //         maxPrice,
+    //         maxSize
+    //     })
+    // }
     componentDidMount() {
-        let rooms = this.formatData(items)
-        let featuredRooms = rooms.filter(room => room.featured === true)
-        let maxPrice = Math.max(...rooms.map(item => item.price))
-        let maxSize = Math.max(...rooms.map(item => item.size))
-        this.setState({
-            rooms,
-            featuredRooms,
-            sortedRooms:rooms,
-            loading:false,
-            price:maxPrice,
-            maxPrice,
-            maxSize
-        })
+        this.getData()
     }
 
     formatData(items) {
